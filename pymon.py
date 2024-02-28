@@ -5,9 +5,14 @@ black_list = ['MicrosoftHost.exe', 'taskhost.exe']
 while True:
     processes = sorted(psutil.process_iter(['pid', 'name', 'cpu_percent']), key=lambda d: d.info['cpu_percent'], reverse=True)
     os.system('cls')
+    free_cpu = 0
     for process in processes:
+
         if process.info['cpu_percent'] > 0:
             print(process.info)
+
+        if process.info['pid'] == 0:
+            free_cpu = process.info['cpu_percent']
 
         for unwanted in black_list:
             if process.info['name'] == unwanted:
@@ -19,6 +24,7 @@ while True:
                 except:
                     print(f'couldnt terminate {process.info}')
                     pass
-
+            
+    print(f'\nfree_cpu: {free_cpu}')
     time.sleep(10)
 
